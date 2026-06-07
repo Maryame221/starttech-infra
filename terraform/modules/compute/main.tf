@@ -144,13 +144,18 @@ resource "aws_launch_template" "backend" {
   image_id      = data.aws_ami.amazon_linux.id
   instance_type = "t3.micro"
 
-  vpc_security_group_ids = [
-    aws_security_group.ec2_sg.id
-  ]
+  network_interfaces {
+    associate_public_ip_address = true
+    security_groups = [
+      aws_security_group.ec2_sg.id
+    ]
+  }
 
   iam_instance_profile {
     name = aws_iam_instance_profile.ec2_profile.name
   }
+
+
 }
 
 resource "aws_autoscaling_group" "backend" {
@@ -164,7 +169,7 @@ resource "aws_autoscaling_group" "backend" {
     aws_lb_target_group.backend.arn
   ]
 
-  vpc_zone_identifier = var.private_subnet_ids
+  vpc_zone_identifier = var.public_subnet_ids
 
   launch_template {
     id      = aws_launch_template.backend.id

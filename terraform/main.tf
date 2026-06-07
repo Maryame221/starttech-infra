@@ -12,3 +12,17 @@ module "compute" {
   public_subnet_ids  = module.networking.public_subnet_ids
   private_subnet_ids = module.networking.private_subnet_ids
 }
+
+module "storage" {
+  source = "./modules/storage"
+
+  project_name = var.project_name
+  private_subnet_ids = module.networking.private_subnet_ids
+
+}
+
+module "monitoring" {
+  source = "./modules/monitoring"
+
+  project_name = var.project_name
+}
