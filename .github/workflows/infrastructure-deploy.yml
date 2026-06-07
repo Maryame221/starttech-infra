@@ -39,8 +39,8 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan
+        run: terraform plan -var="aws_region=eu-west-1" -var="project_name=starttech"
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve
+        if: github.event_name == 'workflow_dispatch'
+        run: terraform apply -auto-approve -var="aws_region=eu-west-1" -var="project
